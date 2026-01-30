@@ -1,24 +1,25 @@
 {
-  "name": "backend",
+  "name": "nexa-eats-backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "NEXA EATS Restaurant Management System Backend",
+  "main": "src/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/server.js",
+    "dev": "node src/server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "keywords": ["restaurant", "management", "nodejs", "express", "mongodb"],
+  "author": "NEXA EATS",
+  "license": "MIT",
   "dependencies": {
-    "bcryptjs": "^3.0.3",
-    "cors": "^2.8.6",
-    "dotenv": "^17.2.3",
-    "express": "^5.2.1",
-    "express-rate-limit": "^8.2.1",
-    "express-validator": "^7.3.1",
-    "jsonwebtoken": "^9.0.3",
-    "mongoose": "^9.1.5",
-    "socket.io": "^4.8.3",
-    "uuid": "^13.0.0"
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "express-validator": "^7.0.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.0.3",
+    "socket.io": "^4.7.2",
+    "uuid": "^9.0.1"
   }
 }
