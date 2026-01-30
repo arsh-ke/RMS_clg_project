@@ -1,0 +1,170 @@
+{
+  "timestamp": "2026-01-30T06:32:12.484046",
+  "total_tests": 27,
+  "passed_tests": 26,
+  "success_rate": 96.29629629629629,
+  "test_results": [
+    {
+      "test": "Health Check",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-01-30T06:32:10.464975"
+    },
+    {
+      "test": "Admin Login",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-01-30T06:32:10.727077"
+    },
+    {
+      "test": "User Registration",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-01-30T06:32:10.990006"
+    },
+    {
+      "test": "Token Refresh",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-01-30T06:32:11.031644"
+    },
+    {
+      "test": "Get Current User",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-01-30T06:32:11.072443"
+    },
+    {
+      "test": "Create Menu Item",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-01-30T06:32:11.145693"
+    },
+    {
+      "test": "Get Menu Items",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-01-30T06:32:11.186187"
+    },
+    {
+      "test": "Get Menu Item by ID",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-01-30T06:32:11.226126"
+    },
+    {
+      "test": "Update Menu Item",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-01-30T06:32:11.264897"
+    },
+    {
+      "test": "Create Table",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-01-30T06:32:11.330330"
+    },
+    {
+      "test": "Get Tables",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-01-30T06:32:11.369306"
+    },
+    {
+      "test": "Get Table Stats",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-01-30T06:32:11.406007"
+    },
+    {
+      "test": "Update Table Status",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-01-30T06:32:11.442834"
+    },
+    {
+      "test": "Create Order",
+      "success": false,
+      "details": "Response: {'status_code': 520, 'text': 'Internal Server Error'}",
+      "timestamp": "2026-01-30T06:32:11.525968"
+    },
+    {
+      "test": "Create Inventory Item",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-01-30T06:32:11.590186"
+    },
+    {
+      "test": "Get Inventory",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-01-30T06:32:11.629465"
+    },
+    {
+      "test": "Get Low Stock Items",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-01-30T06:32:11.666097"
+    },
+    {
+      "test": "Restock Inventory Item",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-01-30T06:32:11.704440"
+    },
+    {
+      "test": "Get Dashboard Analytics",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-01-30T06:32:11.746381"
+    },
+    {
+      "test": "Get Sales Analytics",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-01-30T06:32:11.786281"
+    },
+    {
+      "test": "Get Top Items Analytics",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-01-30T06:32:11.825238"
+    },
+    {
+      "test": "AI Sales Prediction",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-01-30T06:32:11.866770"
+    },
+    {
+      "test": "AI Food Recommendations",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-01-30T06:32:11.907475"
+    },
+    {
+      "test": "AI Inventory Forecast",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-01-30T06:32:11.946249"
+    },
+    {
+      "test": "AI Assistant",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-01-30T06:32:11.984174"
+    },
+    {
+      "test": "Get Users",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-01-30T06:32:12.027289"
+    },
+    {
+      "test": "Create User (Admin)",
+      "success": true,
+      "details": "",
+      "timestamp": "2026-01-30T06:32:12.287505"
+    }
+  ]
+}
