@@ -1,0 +1,137 @@
+{
+  "project_name": "NEXA EATS",
+  "theme_strategy": {
+    "mode": "dark",
+    "primary_palette": "Midnight Ember",
+    "emotional_tone": "Efficient, Industrial, High-Contrast, Cyber-Gastronomy",
+    "visual_style": "Dashboard/Admin Panel with high data density but breathable spacing"
+  },
+  "typography": {
+    "font_family": {
+      "headings": "Barlow Condensed, sans-serif",
+      "body": "Inter, sans-serif",
+      "mono": "JetBrains Mono, monospace"
+    },
+    "scale": {
+      "h1": "text-4xl font-bold tracking-tight uppercase",
+      "h2": "text-3xl font-semibold tracking-tight",
+      "h3": "text-2xl font-medium",
+      "body": "text-base leading-relaxed text-zinc-400",
+      "small": "text-sm font-medium text-zinc-500",
+      "label": "text-xs font-bold uppercase tracking-widest text-zinc-600"
+    },
+    "imports": [
+      "@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');"
+    ]
+  },
+  "colors": {
+    "background": {
+      "default": "#09090b",
+      "paper": "#18181b",
+      "subtle": "#27272a"
+    },
+    "primary": {
+      "main": "#f97316",
+      "hover": "#ea580c",
+      "foreground": "#09090b"
+    },
+    "text": {
+      "primary": "#fafafa",
+      "secondary": "#a1a1aa",
+      "muted": "#52525b"
+    },
+    "border": {
+      "default": "#27272a",
+      "active": "#f97316"
+    },
+    "status": {
+      "success": "#22c55e",
+      "warning": "#eab308",
+      "error": "#ef4444",
+      "info": "#3b82f6"
+    },
+    "charts": {
+      "color_1": "#f97316",
+      "color_2": "#ea580c",
+      "color_3": "#fb923c",
+      "color_4": "#fdba74",
+      "color_5": "#52525b"
+    }
+  },
+  "layout": {
+    "grid_system": "Bento Grid (CSS Grid)",
+    "spacing": {
+      "container_padding": "p-6 md:p-8 lg:p-10",
+      "card_padding": "p-6",
+      "gap": "gap-6"
+    },
+    "radius": {
+      "default": "rounded-md",
+      "button": "rounded-sm",
+      "card": "rounded-lg"
+    },
+    "sidebar": {
+      "width": "w-64",
+      "collapsed_width": "w-20",
+      "bg": "bg-zinc-950 border-r border-zinc-800"
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-orange-500 text-black hover:bg-orange-600 font-semibold shadow-none rounded-sm transition-all active:scale-95",
+      "secondary": "bg-zinc-800 text-white hover:bg-zinc-700 border border-zinc-700 rounded-sm",
+      "ghost": "hover:bg-orange-500/10 hover:text-orange-500 text-zinc-400"
+    },
+    "cards": {
+      "default": "bg-zinc-900/50 border border-zinc-800/50 backdrop-blur-sm rounded-lg hover:border-zinc-700 transition-colors",
+      "interactive": "cursor-pointer hover:border-orange-500/50 hover:bg-zinc-900 group"
+    },
+    "inputs": {
+      "default": "bg-zinc-950 border-zinc-800 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 rounded-sm placeholder:text-zinc-600"
+    },
+    "badges": {
+      "default": "bg-zinc-800 text-zinc-300 border-zinc-700",
+      "success": "bg-green-500/10 text-green-500 border-green-500/20",
+      "warning": "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
+      "pending": "bg-orange-500/10 text-orange-500 border-orange-500/20"
+    }
+  },
+  "motion": {
+    "library": "framer-motion",
+    "transitions": {
+      "default": { "duration": 0.2, "ease": "easeInOut" },
+      "spring": { "type": "spring", "stiffness": 300, "damping": 30 }
+    },
+    "animations": {
+      "fade_in": { "initial": { "opacity": 0 }, "animate": { "opacity": 1 } },
+      "slide_up": { "initial": { "y": 20, "opacity": 0 }, "animate": { "y": 0, "opacity": 1 } },
+      "list_item": { "layout": true, "initial": { "opacity": 0, "scale": 0.9 }, "animate": { "opacity": 1, "scale": 1 } }
+    }
+  },
+  "assets": {
+    "images": {
+      "hero_bg": "https://images.unsplash.com/photo-1601924334752-9056611bb684?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzl8MHwxfHNlYXJjaHw0fHxtb2Rlcm4lMjByZXN0YXVyYW50JTIwaW50ZXJpb3IlMjBkYXJrJTIwb3JhbmdlJTIwbGlnaHRpbmd8ZW58MHx8fHwxNzY5NzUzNjExfDA&ixlib=rb-4.1.0&q=85",
+      "login_cover": "https://images.unsplash.com/photo-1611309454921-16cef3438ee0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTB8MHwxfHNlYXJjaHwyfHxnb3VybWV0JTIwYnVyZ2VyJTIwZGFyayUyMGJhY2tncm91bmR8ZW58MHx8fHwxNzY5NzUzNjEwfDA&ixlib=rb-4.1.0&q=85",
+      "placeholder_food": "https://images.unsplash.com/photo-1673166516558-3f1b88a22db8?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTB8MHwxfHNlYXJjaHw0fHxnb3VybWV0JTIwYnVyZ2VyJTIwZGFyayUyMGJhY2tncm91bmR8ZW58MHx8fHwxNzY5NzUzNjEwfDA&ixlib=rb-4.1.0&q=85"
+    },
+    "icons": "lucide-react"
+  },
+  "instructions_to_main_agent": [
+    "1. SETUP: Ensure 'Barlow Condensed' is imported in index.css.",
+    "2. THEME: Force DARK MODE by default. Do not implement a light mode toggle unless explicitly asked. The brand is 'Night Mode' only.",
+    "3. LAYOUT: Use a fixed sidebar layout for the admin panel. The sidebar should be collapsible.",
+    "4. KITCHEN DISPLAY: This is a key view. Use a Kanban-style board (Pending -> Preparing -> Ready) with large, readable cards. Use color coding (Orange for Pending, Blue for Preparing, Green for Ready).",
+    "5. FORMS: Use Shadcn Form components but style them with the 'inputs.default' styles defined above (sharp corners, dark bg).",
+    "6. CHARTS: Use Recharts. Style the tooltips to be dark with orange borders.",
+    "7. NOTIFICATIONS: Use 'sonner' for toasts. Position them top-right.",
+    "8. AI FEATURES: For the 'AI Insights' page, use a 'Terminal/Code' aesthetic. Monospace fonts for data, dark backgrounds, neon orange highlights.",
+    "9. ACCESSIBILITY: Ensure the Orange text on Black background meets contrast ratios. Use lighter shades of orange for text if needed."
+  ],
+  "universal_guidelines": [
+    "Avoid gradients for backgrounds; use solid dark colors or subtle noise textures.",
+    "Use 1px borders to define hierarchy instead of shadows.",
+    "All interactive elements must have a hover state (brightness-110 or border color change).",
+    "Data density should be high but legible. Use 'text-sm' as the default body size for tables.",
+    "Do not use rounded-full for buttons; use rounded-sm or rounded-md for a more industrial look."
+  ]
+}
