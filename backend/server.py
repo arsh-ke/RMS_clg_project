@@ -637,10 +637,13 @@ async def create_order(order_data: OrderCreate, user: dict = Depends(authorize('
     }
     await db.notifications.insert_one(notification_doc)
     
-    await emit_to_role('kitchen', 'new_order', serialize_doc(order_doc))
-    await emit_to_role('manager', 'new_order', serialize_doc(order_doc))
+    # Serialize the order with the proper _id
+    serialized_order = serialize_doc(order_doc)
     
-    return {"success": True, "data": serialize_doc(order_doc)}
+    await emit_to_role('kitchen', 'new_order', serialized_order)
+    await emit_to_role('manager', 'new_order', serialized_order)
+    
+    return {"success": True, "data": serialized_order}
 
 @api.get("/orders/{order_id}")
 async def get_order(order_id: str, user: dict = Depends(get_current_user)):
