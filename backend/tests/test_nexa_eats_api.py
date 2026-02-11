@@ -201,11 +201,12 @@ class TestTableManagement:
     def test_create_table(self, admin_headers):
         """Test create table"""
         # Use a unique high table number to avoid conflicts
+        # Valid locations: indoor, outdoor, balcony, vip
         table_number = 9000 + (int(datetime.now().timestamp()) % 1000)
         response = requests.post(f"{BASE_URL}/api/tables", headers=admin_headers, json={
             "tableNumber": table_number,
             "capacity": 4,
-            "location": "Indoor",
+            "location": "indoor",
             "status": "free"
         })
         assert response.status_code == 201, f"Failed: {response.json()}"
@@ -568,11 +569,12 @@ def get_menu_item_id(admin_headers):
 @pytest.fixture(scope="class")
 def created_table_id(admin_headers):
     """Create table for testing"""
+    # Valid locations: indoor, outdoor, balcony, vip
     table_number = 8000 + (int(datetime.now().timestamp()) % 1000)
     response = requests.post(f"{BASE_URL}/api/tables", headers=admin_headers, json={
         "tableNumber": table_number,
         "capacity": 4,
-        "location": "Test Area"
+        "location": "indoor"
     })
     assert response.status_code == 201, f"Table creation failed: {response.json()}"
     table_id = response.json()["data"]["id"]
@@ -600,13 +602,14 @@ def created_order_id(admin_headers, get_menu_item_id):
 @pytest.fixture(scope="class")
 def created_inventory_item_id(admin_headers):
     """Create inventory item for testing"""
+    # Valid categories: vegetables, meat, dairy, spices, beverages, grains, oils, other
     unique_name = f"TEST_Inv_{uuid.uuid4().hex[:6]}"
     response = requests.post(f"{BASE_URL}/api/inventory", headers=admin_headers, json={
         "name": unique_name,
-        "category": "test",
+        "category": "vegetables",
         "quantity": 100,
         "unit": "kg",
-        "minimumStock": 10,
+        "minThreshold": 10,
         "costPerUnit": 25
     })
     assert response.status_code == 201, f"Inventory creation failed: {response.json()}"
