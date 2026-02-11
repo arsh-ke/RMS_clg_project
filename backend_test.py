@@ -7,7 +7,7 @@ from datetime import datetime
 from typing import Dict, Any, Optional
 
 class NexaEatsAPITester:
-    def __init__(self, base_url: str = "https://menumaster-109.preview.emergentagent.com"):
+    def __init__(self, base_url: str = "https://resto-backend-test.preview.emergentagent.com"):
         self.base_url = base_url
         self.access_token = None
         self.refresh_token = None
