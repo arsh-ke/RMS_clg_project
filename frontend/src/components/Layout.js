@@ -135,7 +135,7 @@ const Layout = () => {
       {/* Desktop Sidebar */}
       <aside
         className={`hidden lg:flex flex-col fixed left-0 top-0 bottom-0 bg-zinc-950 border-r border-zinc-800 transition-all duration-300 z-40 ${
-          sidebarOpen ? 'w-64' : 'w-20'
+          sidebarOpen ? 'w-56 xl:w-64' : 'w-20'
         }`}
       >
         <div className="p-4 border-b border-zinc-800 flex items-center justify-between">
@@ -190,7 +190,7 @@ const Layout = () => {
       </aside>
 
       {/* Main Content */}
-      <div className={`lg:ml-${sidebarOpen ? '64' : '20'} min-h-screen transition-all duration-300`} style={{ marginLeft: sidebarOpen ? '16rem' : '5rem' }}>
+      <div className={`min-h-screen transition-all duration-300`} style={{ marginLeft: sidebarOpen ? (window.innerWidth >= 1280 ? '16rem' : '14rem') : '5rem' }}>
         {/* Desktop Header */}
         <header className="hidden lg:flex sticky top-0 z-30 bg-zinc-900/80 backdrop-blur-sm border-b border-zinc-800 px-6 py-3 items-center justify-between">
           <div className="flex items-center gap-4">
