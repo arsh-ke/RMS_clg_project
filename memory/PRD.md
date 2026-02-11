@@ -1,12 +1,12 @@
 # NEXA EATS - Restaurant Management System
 
 ## Project Overview
-A complete, production-grade Restaurant Management System (RMS) built for a 6th semester college project. Features modern black & orange UI theme with smooth animations.
+A complete, production-grade Restaurant Management System (RMS) built for a final year college project. Features modern black & orange UI theme with smooth animations.
 
-## Architecture
+## Architecture (MERN Stack)
 - **Frontend**: React.js + Tailwind CSS + Framer Motion + Shadcn/UI
-- **Backend**: FastAPI (Python) + Socket.IO for real-time notifications
-- **Database**: MongoDB
+- **Backend**: Node.js + Express.js + Socket.IO for real-time notifications
+- **Database**: MongoDB with Mongoose ODM
 - **Authentication**: Custom JWT (Access + Refresh Tokens)
 
 ## User Personas & Roles
@@ -15,12 +15,12 @@ A complete, production-grade Restaurant Management System (RMS) built for a 6th 
 3. **Staff (Waiter/Cashier)** - Order creation, table management, payments
 4. **Kitchen Staff** - Kitchen Display System, order status updates
 
-## Core Features Implemented ✅
+## Core Features Implemented
 
 ### Authentication & Security
 - [x] Custom JWT with access (15min) + refresh (7 days) tokens
 - [x] Role-Based Access Control (RBAC)
-- [x] Password hashing with bcrypt
+- [x] Password hashing with bcrypt (12 rounds)
 - [x] Rate limiting on API endpoints
 - [x] Centralized error handling
 
@@ -34,7 +34,7 @@ A complete, production-grade Restaurant Management System (RMS) built for a 6th 
 - [x] Categories: Veg, Non-Veg, Drinks, Desserts, Starters, Main Course
 - [x] Price & availability control
 - [x] Preparation time tracking
-- [x] Order count tracking
+- [x] Order count tracking for popularity
 
 ### Table Management
 - [x] Table configuration (number, capacity, location)
@@ -43,7 +43,7 @@ A complete, production-grade Restaurant Management System (RMS) built for a 6th 
 
 ### Order Management
 - [x] Create orders from tables or takeaway
-- [x] Order lifecycle: Pending → Preparing → Ready → Served → Completed
+- [x] Order lifecycle: Pending -> Preparing -> Ready -> Served -> Completed
 - [x] Auto order numbering (ORD-00001)
 - [x] Tax calculation (5% GST)
 - [x] Discount application
@@ -52,11 +52,11 @@ A complete, production-grade Restaurant Management System (RMS) built for a 6th 
 - [x] New order notifications to kitchen
 - [x] Order status change alerts
 - [x] Low stock alerts
-- [x] Payment notifications
+- [x] Role-based event rooms
 
 ### Kitchen Display System
-- [x] Kanban-style board (Pending → Preparing → Ready)
-- [x] Elapsed time tracking
+- [x] Kanban-style board (Pending -> Preparing -> Ready)
+- [x] Elapsed time tracking per order
 - [x] One-click status updates
 - [x] Auto-refresh every 30 seconds
 
@@ -67,71 +67,117 @@ A complete, production-grade Restaurant Management System (RMS) built for a 6th 
 - [x] Payment status tracking
 
 ### Inventory Management
-- [x] Track ingredient stock
-- [x] Category classification
-- [x] Low stock alerts
+- [x] Track ingredient stock with categories
+- [x] Low stock alerts (threshold-based)
 - [x] Restock functionality
 - [x] Cost per unit tracking
+- [x] Total inventory value calculation
 
 ### Reports & Analytics
-- [x] Dashboard with KPIs
+- [x] Dashboard with real-time KPIs
 - [x] Daily/Monthly sales reports
-- [x] Top selling items
-- [x] Revenue by category
+- [x] Top selling items chart
+- [x] Revenue by category (pie chart)
 - [x] Payment method breakdown
 - [x] Order status distribution
 
-### AI-Inspired Features (Rule-Based)
-- [x] Sales Prediction (7-day & monthly forecasts)
+### AI-Powered Features (Rule-Based - No External APIs)
+- [x] Sales Prediction (7-day & monthly forecasts with confidence scores)
 - [x] Food Recommendations (trending, time-based, category-based)
-- [x] Inventory Demand Forecasting
-- [x] AI Assistant (answers questions about restaurant data)
+- [x] Inventory Demand Forecasting (days until empty, restock recommendations)
+- [x] AI Assistant (answers questions about restaurant data using pattern matching)
 
 ## API Endpoints
-- `/api/health` - Health check
-- `/api/auth/*` - Authentication (login, register, refresh)
-- `/api/users/*` - User management
-- `/api/menu/*` - Menu CRUD
-- `/api/tables/*` - Table management
-- `/api/orders/*` - Order management
-- `/api/inventory/*` - Inventory tracking
-- `/api/notifications/*` - Notification system
-- `/api/analytics/*` - Reports & analytics
-- `/api/ai/*` - AI features
 
-## Date: January 30, 2026
+### Authentication
+- POST `/api/auth/register` - User registration
+- POST `/api/auth/login` - User login
+- POST `/api/auth/refresh-token` - Refresh access token
+- GET `/api/auth/me` - Get current user
+
+### Users (Admin Only)
+- GET `/api/users` - List all users
+- POST `/api/users` - Create user
+- PUT `/api/users/:id` - Update user
+- DELETE `/api/users/:id` - Delete user
+
+### Menu
+- GET `/api/menu` - List menu items
+- POST `/api/menu` - Create menu item
+- PUT `/api/menu/:id` - Update menu item
+- DELETE `/api/menu/:id` - Delete menu item
+- GET `/api/menu/popular` - Get popular items
+
+### Tables
+- GET `/api/tables` - List all tables
+- POST `/api/tables` - Create table
+- PUT `/api/tables/:id` - Update table
+- PUT `/api/tables/:id/status` - Update table status
+- GET `/api/tables/stats` - Get table statistics
+
+### Orders
+- GET `/api/orders` - List orders
+- GET `/api/orders/today` - Today's orders
+- GET `/api/orders/kitchen` - Kitchen orders (pending/preparing/ready)
+- POST `/api/orders` - Create order
+- PUT `/api/orders/:id/status` - Update order status
+- PUT `/api/orders/:id/payment` - Process payment
+
+### Inventory
+- GET `/api/inventory` - List inventory items
+- POST `/api/inventory` - Add inventory item
+- PUT `/api/inventory/:id` - Update item
+- PUT `/api/inventory/:id/restock` - Restock item
+- GET `/api/inventory/low-stock` - Get low stock items
+- GET `/api/inventory/stats` - Inventory statistics
+
+### Analytics
+- GET `/api/analytics/dashboard` - Dashboard stats
+- GET `/api/analytics/sales` - Sales data
+- GET `/api/analytics/top-items` - Top selling items
+- GET `/api/analytics/category-revenue` - Revenue by category
+- GET `/api/analytics/orders` - Order statistics
+
+### AI Features
+- GET `/api/ai/sales-prediction` - Sales forecast
+- POST `/api/ai/food-recommendations` - Food suggestions
+- GET `/api/ai/inventory-forecast` - Inventory predictions
+- POST `/api/ai/assistant` - AI Q&A assistant
+
+## Date: February 11, 2026
 
 ## What's Been Implemented
-- Complete backend with 50+ API endpoints
-- Full frontend with 10 pages
-- Real-time notification system
-- Role-based access control
-- Comprehensive analytics dashboard
-- AI-powered insights and predictions
+- Complete Node.js/Express backend (migrated from Python)
+- Full React frontend with 10 responsive pages
+- Real-time notification system with Socket.IO
+- Role-based access control (Admin, Manager, Staff, Kitchen)
+- Comprehensive analytics dashboard with Recharts
+- Rule-based AI insights and predictions
+- Responsive design with Tailwind CSS
+- Framer Motion animations throughout
 
-## Prioritized Backlog
+## Completed in Latest Session
+- [x] Backend migration from Python/FastAPI to Node.js/Express
+- [x] Created Python wrapper for supervisor compatibility
+- [x] All API endpoints working with Node.js
+- [x] User authentication with bcryptjs
+- [x] Comprehensive testing (43 backend tests passed)
+- [x] Created detailed viva presentation script
 
-### P0 - Critical (Done)
-- [x] Authentication system
-- [x] Order management flow
-- [x] Kitchen display system
-- [x] Basic analytics
+## Documentation
+- `/app/memory/PRD.md` - This file
+- `/app/memory/PRESENTATION_SCRIPT.md` - Complete viva presentation with all explanations
 
-### P1 - Important (Future)
+## Test Credentials
+- Admin: admin@nexa-eats.com / admin123
+- Manager: manager@nexa-eats.com / manager123
+
+## Future Enhancements (P1-P2)
 - [ ] Print receipt functionality
 - [ ] Export reports to PDF/Excel
 - [ ] Customer feedback system
-- [ ] Multi-language support
-
-### P2 - Nice to Have (Future)
-- [ ] QR code menu
-- [ ] Online ordering integration
-- [ ] Reservation system with calendar
-- [ ] Employee scheduling
-
-## Next Action Items
-1. Add sample data (menu items, tables) for demo
-2. Configure print receipt functionality
-3. Add email notifications for low stock
-4. Implement data export features
-5. Create API documentation with Swagger
+- [ ] QR code table ordering
+- [ ] Multi-language support (i18n)
+- [ ] Mobile app (React Native)
+- [ ] Payment gateway integration (Stripe/Razorpay)
+- [ ] Employee scheduling module
