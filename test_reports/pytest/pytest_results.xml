@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="14" failures="4" skipped="0" tests="43" time="3.143" timestamp="2026-02-11T07:06:06.509604+00:00" hostname="agent-env-182f0cb4-7aa6-4a38-bf39-731dac920c9f"><testcase classname="backend.tests.test_nexa_eats_api.TestHealth" name="test_health_check" time="0.065" /><testcase classname="backend.tests.test_nexa_eats_api.TestAuthentication" name="test_admin_login_success" time="0.353" /><testcase classname="backend.tests.test_nexa_eats_api.TestAuthentication" name="test_login_invalid_credentials" time="0.036" /><testcase classname="backend.tests.test_nexa_eats_api.TestAuthentication" name="test_register_new_user" time="0.332" /><testcase classname="backend.tests.test_nexa_eats_api.TestAuthentication" name="test_token_refresh" time="0.385" /><testcase classname="backend.tests.test_nexa_eats_api.TestAuthentication" name="test_get_current_user" time="0.039" /><testcase classname="backend.tests.test_nexa_eats_api.TestMenuManagement" name="test_get_all_menu_items" time="0.034" /><testcase classname="backend.tests.test_nexa_eats_api.TestMenuManagement" name="test_create_menu_item" time="0.039"><failure message="assert 400 == 201&#10; +  where 400 = &lt;Response [400]&gt;.status_code">backend/tests/test_nexa_eats_api.py:125: in test_create_menu_item
+    assert response.status_code == 201
+E   assert 400 == 201
+E    +  where 400 = &lt;Response [400]&gt;.status_code</failure></testcase><testcase classname="backend.tests.test_nexa_eats_api.TestMenuManagement" name="test_get_menu_item_by_id" time="0.040"><error message="failed on setup with &quot;KeyError: '_id'&quot;">backend/tests/test_nexa_eats_api.py:534: in created_menu_item_id
+    item_id = response.json()["data"]["_id"]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: '_id'</error></testcase><testcase classname="backend.tests.test_nexa_eats_api.TestMenuManagement" name="test_update_menu_item" time="0.000"><error message="failed on setup with &quot;KeyError: '_id'&quot;">backend/tests/test_nexa_eats_api.py:534: in created_menu_item_id
+    item_id = response.json()["data"]["_id"]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: '_id'</error></testcase><testcase classname="backend.tests.test_nexa_eats_api.TestMenuManagement" name="test_get_menu_categories" time="0.035" /><testcase classname="backend.tests.test_nexa_eats_api.TestMenuManagement" name="test_get_popular_items" time="0.039" /><testcase classname="backend.tests.test_nexa_eats_api.TestMenuManagement" name="test_delete_menu_item" time="0.000"><error message="failed on setup with &quot;KeyError: '_id'&quot;">backend/tests/test_nexa_eats_api.py:534: in created_menu_item_id
+    item_id = response.json()["data"]["_id"]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: '_id'</error></testcase><testcase classname="backend.tests.test_nexa_eats_api.TestTableManagement" name="test_get_all_tables" time="0.039" /><testcase classname="backend.tests.test_nexa_eats_api.TestTableManagement" name="test_create_table" time="0.041"><failure message="assert 400 == 201&#10; +  where 400 = &lt;Response [400]&gt;.status_code">backend/tests/test_nexa_eats_api.py:205: in test_create_table
+    assert response.status_code == 201
+E   assert 400 == 201
+E    +  where 400 = &lt;Response [400]&gt;.status_code</failure></testcase><testcase classname="backend.tests.test_nexa_eats_api.TestTableManagement" name="test_get_table_stats" time="0.040" /><testcase classname="backend.tests.test_nexa_eats_api.TestTableManagement" name="test_update_table_status" time="0.036"><error message="failed on setup with &quot;KeyError: 'data'&quot;">backend/tests/test_nexa_eats_api.py:568: in created_table_id
+    table_id = response.json()["data"]["_id"]
+               ^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'data'</error></testcase><testcase classname="backend.tests.test_nexa_eats_api.TestTableManagement" name="test_delete_table" time="0.000"><error message="failed on setup with &quot;KeyError: 'data'&quot;">backend/tests/test_nexa_eats_api.py:568: in created_table_id
+    table_id = response.json()["data"]["_id"]
+               ^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'data'</error></testcase><testcase classname="backend.tests.test_nexa_eats_api.TestOrderManagement" name="test_get_all_orders" time="0.043" /><testcase classname="backend.tests.test_nexa_eats_api.TestOrderManagement" name="test_create_order" time="0.037"><error message="failed on setup with &quot;KeyError: '_id'&quot;">backend/tests/test_nexa_eats_api.py:546: in get_menu_item_id
+    return items[0]["_id"]
+           ^^^^^^^^^^^^^^^
+E   KeyError: '_id'</error></testcase><testcase classname="backend.tests.test_nexa_eats_api.TestOrderManagement" name="test_get_order_by_id" time="0.000"><error message="failed on setup with &quot;KeyError: '_id'&quot;">backend/tests/test_nexa_eats_api.py:546: in get_menu_item_id
+    return items[0]["_id"]
+           ^^^^^^^^^^^^^^^
+E   KeyError: '_id'</error></testcase><testcase classname="backend.tests.test_nexa_eats_api.TestOrderManagement" name="test_update_order_status" time="0.000"><error message="failed on setup with &quot;KeyError: '_id'&quot;">backend/tests/test_nexa_eats_api.py:546: in get_menu_item_id
+    return items[0]["_id"]
+           ^^^^^^^^^^^^^^^
+E   KeyError: '_id'</error></testcase><testcase classname="backend.tests.test_nexa_eats_api.TestOrderManagement" name="test_update_order_payment" time="0.000"><error message="failed on setup with &quot;KeyError: '_id'&quot;">backend/tests/test_nexa_eats_api.py:546: in get_menu_item_id
+    return items[0]["_id"]
+           ^^^^^^^^^^^^^^^
+E   KeyError: '_id'</error></testcase><testcase classname="backend.tests.test_nexa_eats_api.TestOrderManagement" name="test_get_kitchen_orders" time="0.036" /><testcase classname="backend.tests.test_nexa_eats_api.TestOrderManagement" name="test_get_today_orders" time="0.035" /><testcase classname="backend.tests.test_nexa_eats_api.TestInventoryManagement" name="test_get_all_inventory" time="0.033" /><testcase classname="backend.tests.test_nexa_eats_api.TestInventoryManagement" name="test_create_inventory_item" time="0.041"><failure message="KeyError: '_id'">backend/tests/test_nexa_eats_api.py:345: in test_create_inventory_item
+    return data["data"]["_id"]
+           ^^^^^^^^^^^^^^^^^^^
+E   KeyError: '_id'</failure></testcase><testcase classname="backend.tests.test_nexa_eats_api.TestInventoryManagement" name="test_get_low_stock_items" time="0.034" /><testcase classname="backend.tests.test_nexa_eats_api.TestInventoryManagement" name="test_get_inventory_stats" time="0.034" /><testcase classname="backend.tests.test_nexa_eats_api.TestInventoryManagement" name="test_restock_item" time="0.033"><error message="failed on setup with &quot;KeyError: 'data'&quot;">backend/tests/test_nexa_eats_api.py:602: in created_inventory_item_id
+    item_id = response.json()["data"]["_id"]
+              ^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'data'</error></testcase><testcase classname="backend.tests.test_nexa_eats_api.TestInventoryManagement" name="test_delete_inventory_item" time="0.000"><error message="failed on setup with &quot;KeyError: 'data'&quot;">backend/tests/test_nexa_eats_api.py:602: in created_inventory_item_id
+    item_id = response.json()["data"]["_id"]
+              ^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'data'</error></testcase><testcase classname="backend.tests.test_nexa_eats_api.TestUserManagement" name="test_get_all_users" time="0.038" /><testcase classname="backend.tests.test_nexa_eats_api.TestUserManagement" name="test_create_user_admin" time="0.331"><failure message="KeyError: '_id'">backend/tests/test_nexa_eats_api.py:408: in test_create_user_admin
+    return data["data"]["_id"]
+           ^^^^^^^^^^^^^^^^^^^
+E   KeyError: '_id'</failure></testcase><testcase classname="backend.tests.test_nexa_eats_api.TestUserManagement" name="test_get_user_by_id" time="0.325"><error message="failed on setup with &quot;KeyError: '_id'&quot;">backend/tests/test_nexa_eats_api.py:618: in created_user_id
+    user_id = response.json()["data"]["_id"]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: '_id'</error></testcase><testcase classname="backend.tests.test_nexa_eats_api.TestUserManagement" name="test_update_user" time="0.000"><error message="failed on setup with &quot;KeyError: '_id'&quot;">backend/tests/test_nexa_eats_api.py:618: in created_user_id
+    user_id = response.json()["data"]["_id"]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: '_id'</error></testcase><testcase classname="backend.tests.test_nexa_eats_api.TestUserManagement" name="test_delete_user" time="0.000"><error message="failed on setup with &quot;KeyError: '_id'&quot;">backend/tests/test_nexa_eats_api.py:618: in created_user_id
+    user_id = response.json()["data"]["_id"]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: '_id'</error></testcase><testcase classname="backend.tests.test_nexa_eats_api.TestAnalytics" name="test_get_dashboard_analytics" time="0.040" /><testcase classname="backend.tests.test_nexa_eats_api.TestAnalytics" name="test_get_sales_analytics" time="0.035" /><testcase classname="backend.tests.test_nexa_eats_api.TestAnalytics" name="test_get_top_items" time="0.033" /><testcase classname="backend.tests.test_nexa_eats_api.TestAIFeatures" name="test_sales_prediction" time="0.042" /><testcase classname="backend.tests.test_nexa_eats_api.TestAIFeatures" name="test_food_recommendations" time="0.035" /><testcase classname="backend.tests.test_nexa_eats_api.TestAIFeatures" name="test_inventory_forecast" time="0.034" /><testcase classname="backend.tests.test_nexa_eats_api.TestAIFeatures" name="test_ai_assistant" time="0.033" /></testsuite></testsuites>
