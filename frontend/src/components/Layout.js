@@ -190,7 +190,7 @@ const Layout = () => {
       </aside>
 
       {/* Main Content */}
-      <div className={`min-h-screen transition-all duration-300`} style={{ marginLeft: sidebarOpen ? (window.innerWidth >= 1280 ? '16rem' : '14rem') : '5rem' }}>
+      <div className={`min-h-screen transition-all duration-300 lg:ml-20 ${sidebarOpen ? 'lg:ml-56 xl:ml-64' : ''}`}>
         {/* Desktop Header */}
         <header className="hidden lg:flex sticky top-0 z-30 bg-zinc-900/80 backdrop-blur-sm border-b border-zinc-800 px-6 py-3 items-center justify-between">
           <div className="flex items-center gap-4">
