@@ -1,8 +1,10 @@
 const Order = require('../models/Order');
 const Table = require('../models/Table');
 const MenuItem = require('../models/MenuItem');
+const Inventory = require('../models/Inventory');
 const Notification = require('../models/Notification');
 const { emitToRole, emitToAll } = require('../config/socket');
+const mongoose = require('mongoose');
 
 exports.getAllOrders = async (req, res, next) => {
   try {
@@ -160,15 +162,83 @@ exports.updateOrderStatus = async (req, res, next) => {
     }
 
     const previousStatus = order.status;
-    order.status = status;
-    await order.save();
+    // perform inventory deduction when marking served
+    if (status === 'served' && previousStatus !== 'served') {
+      // start a session for transactional guarantees
+      const session = await mongoose.startSession();
+      session.startTransaction();
+      try {
+        // iterate through ordered items and deduct ingredients
+        for (const item of order.items) {
+          const menuItem = await MenuItem.findById(item.menuItem).session(session);
+          if (!menuItem) continue;
+          if (menuItem.recipe && menuItem.recipe.length) {
+            for (const ing of menuItem.recipe) {
+              const inv = await Inventory.findById(ing.inventoryItem).session(session);
+              if (!inv) {
+                throw new Error(`Inventory item not found for recipe`);
+              }
+              const deductQty = ing.quantity * item.quantity;
+              if (inv.quantity < deductQty) {
+                throw new Error(`Insufficient stock for ${inv.name}`);
+              }
+              inv.quantity -= deductQty;
+              inv.dailyUsage = (inv.dailyUsage || 0) + deductQty;
+              await inv.save({ session });
 
-    if (status === 'completed' && order.table) {
-      const table = await Table.findById(order.table);
-      if (table) {
-        table.status = 'free';
-        table.currentOrder = null;
-        await table.save();
+              // create low stock notification if threshold reached
+              if (inv.quantity <= inv.minThreshold) {
+                await Notification.create([
+                  {
+                    type: 'low_stock',
+                    title: 'Low Stock Alert',
+                    message: `${inv.name} is running low (qty: ${inv.quantity}${inv.unit || ''})`,
+                    targetRoles: ['admin', 'manager']
+                  }
+                ], { session });
+
+                emitToRole('admin', 'low_stock_alert', { item: inv });
+                emitToRole('manager', 'low_stock_alert', { item: inv });
+              }
+            }
+          }
+        }
+
+        // update order status inside transaction
+        order.status = status;
+        await order.save({ session });
+
+        if (status === 'completed' && order.table) {
+          const table = await Table.findById(order.table).session(session);
+          if (table) {
+            table.status = 'free';
+            table.currentOrder = null;
+            await table.save({ session });
+          }
+        }
+
+        await session.commitTransaction();
+        session.endSession();
+      } catch (err) {
+        await session.abortTransaction();
+        session.endSession();
+        // if inventory related error, respond accordingly
+        if (err.message && err.message.startsWith('Insufficient stock')) {
+          return res.status(400).json({ success: false, message: err.message });
+        }
+        throw err;
+      }
+    } else {
+      order.status = status;
+      await order.save();
+
+      if (status === 'completed' && order.table) {
+        const table = await Table.findById(order.table);
+        if (table) {
+          table.status = 'free';
+          table.currentOrder = null;
+          await table.save();
+        }
       }
     }
 
@@ -230,12 +300,35 @@ exports.updateOrderPayment = async (req, res, next) => {
       order.total = order.subtotal + order.tax - discount;
     }
 
-    if (paymentMethod) order.paymentMethod = paymentMethod;
+    if (paymentMethod) {
+      // online payments must go through the Razorpay flow
+      if (paymentMethod === 'online') {
+        return res.status(400).json({
+          success: false,
+          message: 'Online payments must be processed via Razorpay checkout'
+        });
+      }
+      order.paymentMethod = paymentMethod;
+    }
     if (paymentStatus) order.paymentStatus = paymentStatus;
 
     await order.save();
 
     if (paymentStatus === 'paid') {
+      // Mark order as completed
+      order.status = 'completed';
+      await order.save();
+
+      // Free the table if it was a dine-in order
+      if (order.table) {
+        const table = await Table.findById(order.table);
+        if (table) {
+          table.status = 'free';
+          table.currentOrder = null;
+          await table.save();
+        }
+      }
+
       await Notification.create({
         type: 'payment',
         title: 'Payment Received',

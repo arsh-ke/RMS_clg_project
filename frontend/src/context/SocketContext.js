@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState, useCallback } fr
 import { io } from 'socket.io-client';
 import { useAuth } from './AuthContext';
 import { toast } from 'sonner';
+import { soundNotificationManager } from '../utils/soundNotificationManager';
 
 const SocketContext = createContext(null);
 
@@ -37,6 +38,13 @@ export const SocketProvider = ({ children }) => {
       });
 
       newSocket.on('new_order', (data) => {
+        // Play sound notification only for kitchen role users
+        if (user?.role === 'kitchen') {
+          soundNotificationManager.playSound('new_order_notification', '/notification.mp3').catch((error) => {
+            console.error('Failed to play order notification sound:', error);
+          });
+        }
+
         toast.info('New Order', {
           description: `Order ${data.orderNumber} received - ${data.tableNumber ? `Table ${data.tableNumber}` : 'Takeaway'}`,
         });

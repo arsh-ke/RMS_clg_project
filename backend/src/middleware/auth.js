@@ -10,25 +10,31 @@ const protect = async (req, res, next) => {
     }
 
     if (!token) {
+      console.warn(`[MIDDLEWARE] Protection failed - No token provided for route: ${req.path}`);
       return res.status(401).json({
         success: false,
         message: 'Not authorized to access this route'
       });
     }
 
+    console.log(`[MIDDLEWARE] Verifying token for route: ${req.path}`);
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id);
 
     if (!user || !user.isActive) {
+      console.warn(`[MIDDLEWARE] Protection failed - User not found or inactive for ID: ${decoded.id}`);
       return res.status(401).json({
         success: false,
         message: 'User not found or inactive'
       });
     }
 
+    console.log(`[MIDDLEWARE] Token verified successfully for user: ${user._id}`);
     req.user = user;
     next();
   } catch (error) {
+    console.error(`[MIDDLEWARE] Auth error: ${error.message}`, error);
     return res.status(401).json({
       success: false,
       message: 'Not authorized to access this route'

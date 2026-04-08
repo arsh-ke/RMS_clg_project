@@ -21,7 +21,7 @@ router.route('/')
 
 router.route('/:id')
   .get(getTable)
-  .put(authorize('admin', 'manager'), updateTable)
+  .put(authorize('admin','manager'), updateTable)
   .delete(authorize('admin', 'manager'), deleteTable);
 
 router.put('/:id/status', updateTableStatus);

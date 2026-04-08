@@ -1,4 +1,5 @@
 const MenuItem = require('../models/MenuItem');
+const Inventory = require('../models/Inventory');
 
 exports.getAllMenuItems = async (req, res, next) => {
   try {
@@ -42,6 +43,19 @@ exports.getMenuItem = async (req, res, next) => {
 
 exports.createMenuItem = async (req, res, next) => {
   try {
+    // verify any inventory references in recipe
+    if (req.body.recipe && Array.isArray(req.body.recipe)) {
+      for (const ing of req.body.recipe) {
+        const inv = await Inventory.findById(ing.inventoryItem);
+        if (!inv) {
+          return res.status(400).json({
+            success: false,
+            message: `Invalid inventory item: ${ing.inventoryItem}`
+          });
+        }
+      }
+    }
+
     const item = await MenuItem.create(req.body);
 
     res.status(201).json({
@@ -55,6 +69,17 @@ exports.createMenuItem = async (req, res, next) => {
 
 exports.updateMenuItem = async (req, res, next) => {
   try {
+    if (req.body.recipe && Array.isArray(req.body.recipe)) {
+      for (const ing of req.body.recipe) {
+        const inv = await Inventory.findById(ing.inventoryItem);
+        if (!inv) {
+          return res.status(400).json({
+            success: false,
+            message: `Invalid inventory item: ${ing.inventoryItem}`
+          });
+        }
+      }
+    }
     const item = await MenuItem.findByIdAndUpdate(
       req.params.id,
       req.body,

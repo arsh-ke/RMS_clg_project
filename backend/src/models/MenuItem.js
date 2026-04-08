@@ -36,7 +36,20 @@ const menuItemSchema = new mongoose.Schema({
   orderCount: {
     type: Number,
     default: 0
-  }
+  },
+  // recipe describes the inventory ingredients required for one unit of this menu item
+  recipe: [{
+    inventoryItem: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Inventory',
+      required: true
+    },
+    quantity: {
+      type: Number,
+      required: true,
+      min: 0
+    }
+  }]
 }, {
   timestamps: true
 });

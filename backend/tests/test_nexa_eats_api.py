@@ -281,8 +281,9 @@ class TestOrderManagement:
         assert data["success"] == True
         print(f"Got order: {data['data']['orderNumber']}")
     
-    def test_update_order_status(self, admin_headers, created_order_id):
-        """Test update order status"""
+    def test_update_order_status(self, admin_headers, created_order_id, created_inventory_item_id):
+        """Test update order status and check inventory deduction"""
+        # move to preparing
         response = requests.put(f"{BASE_URL}/api/orders/{created_order_id}/status", headers=admin_headers, json={
             "status": "preparing"
         })
@@ -291,6 +292,52 @@ class TestOrderManagement:
         assert data["success"] == True
         assert data["data"]["status"] == "preparing"
         print(f"Updated order status to: preparing")
+
+        # ready
+        response = requests.put(f"{BASE_URL}/api/orders/{created_order_id}/status", headers=admin_headers, json={
+            "status": "ready"
+        })
+        assert response.status_code == 200
+        data = response.json()
+        assert data["success"] == True
+        assert data["data"]["status"] == "ready"
+        print(f"Updated order status to: ready")
+
+        # serve - should deduct inventory
+        response = requests.put(f"{BASE_URL}/api/orders/{created_order_id}/status", headers=admin_headers, json={
+            "status": "served"
+        })
+        assert response.status_code == 200, f"Serve failed: {response.text}"
+        data = response.json()
+        assert data["success"] == True
+        assert data["data"]["status"] == "served"
+        print("Order served; inventory should be deducted")
+
+        # verify inventory quantity decreased by 1
+        inv_resp = requests.get(f"{BASE_URL}/api/inventory/{created_inventory_item_id}", headers=admin_headers)
+        assert inv_resp.status_code == 200
+        inv_data = inv_resp.json()
+        assert inv_data["success"] == True
+        remaining = inv_data["data"]["quantity"]
+        assert remaining == 99 or remaining == pytest.approx(99)
+        print(f"Inventory after serve: {remaining}")
+
+    def test_insufficient_stock_prevent_serving(self, admin_headers, get_menu_item_id, created_table_id):
+        """Create order with huge quantity and make sure serve fails"""
+        # attempt create order with quantity too large
+        response = requests.post(f"{BASE_URL}/api/orders", headers=admin_headers, json={
+            "tableId": created_table_id,
+            "items": [{"menuItemId": get_menu_item_id, "quantity": 10000}],
+            "orderType": "dine-in"
+        })
+        assert response.status_code == 201
+        order_id = response.json()["data"]["id"]
+        serve_resp = requests.put(f"{BASE_URL}/api/orders/{order_id}/status", headers=admin_headers, json={"status": "served"})
+        assert serve_resp.status_code == 400
+        data = serve_resp.json()
+        assert not data.get("success")
+        assert "Insufficient" in data.get("message", "")
+        print("Serving prevented due to insufficient stock")
     
     def test_update_order_payment(self, admin_headers, created_order_id):
         """Test update order payment"""
@@ -584,8 +631,17 @@ def created_table_id(admin_headers):
 
 
 @pytest.fixture(scope="class")
-def created_order_id(admin_headers, get_menu_item_id):
-    """Create order for testing"""
+def created_order_id(admin_headers, get_menu_item_id, created_inventory_item_id):
+    """Create order for testing and ensure menu item has a recipe linked to inventory"""
+    # attach a simple recipe (1 unit of inventory per menu item)
+    update = {
+        "recipe": [{
+            "inventoryItem": created_inventory_item_id,
+            "quantity": 1
+        }]
+    }
+    requests.put(f"{BASE_URL}/api/menu/{get_menu_item_id}", headers=admin_headers, json=update)
+
     response = requests.post(f"{BASE_URL}/api/orders", headers=admin_headers, json={
         "items": [{
             "menuItemId": get_menu_item_id,

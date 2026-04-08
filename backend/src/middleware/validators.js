@@ -29,6 +29,9 @@ const menuItemValidation = [
   body('name').notEmpty().withMessage('Item name is required'),
   body('price').isNumeric().withMessage('Price must be a number'),
   body('category').isIn(['veg', 'non-veg', 'drinks', 'desserts', 'starters', 'main-course']).withMessage('Invalid category'),
+  body('recipe').optional().isArray().withMessage('Recipe must be an array'),
+  body('recipe.*.inventoryItem').optional().isMongoId().withMessage('Invalid inventory item ID'),
+  body('recipe.*.quantity').optional().isNumeric().withMessage('Recipe quantity must be a number'),
   validate
 ];
 

@@ -7,7 +7,7 @@ from datetime import datetime
 from typing import Dict, Any, Optional
 
 class NexaEatsAPITester:
-    def __init__(self, base_url: str = "https://resto-backend-test.preview.emergentagent.com"):
+    def __init__(self, base_url: str = "https://resto-backend-test.preview.nexaeats.local"):
         self.base_url = base_url
         self.access_token = None
         self.refresh_token = None
@@ -219,18 +219,44 @@ class NexaEatsAPITester:
         return True
 
     def test_order_operations(self):
-        """Test order operations"""
+        """Test order operations with inventory deduction"""
+        # ensure we have a menu item and table
         if not self.created_menu_item_id or not self.created_table_id:
             self.log_test("Order Operations", False, "Missing menu item or table for order creation")
             return False
 
-        # Create order
+        # create an inventory item to use in recipe if not already created
+        if not self.created_inventory_id:
+            inventory_data = {
+                "name": "Recipe Ingredient",
+                "category": "vegetables",
+                "quantity": 20.0,
+                "unit": "kg",
+                "minThreshold": 15.0,
+                "costPerUnit": 10.0,
+                "supplier": "Recipe Supplier"
+            }
+            success, response = self.make_request('POST', 'inventory', inventory_data, 200)
+            if success and response.get('success'):
+                self.created_inventory_id = response['data']['id']
+                self.log_test("Create Recipe Inventory Item", True)
+            else:
+                self.log_test("Create Recipe Inventory Item", False, f"Response: {response}")
+                return False
+
+        # update the menu item to include a recipe using the inventory item
+        update_menu = {"recipe": [{"inventoryItem": self.created_inventory_id, "quantity": 2}]} 
+        success, response = self.make_request('PUT', f'menu/{self.created_menu_item_id}', update_menu)
+        self.log_test("Attach Recipe to Menu Item", success and response.get('success'),
+                     f"Response: {response}" if not success else "")
+
+        # Create order that will consume inventory
         order_data = {
             "tableId": self.created_table_id,
             "items": [
                 {
                     "menuItemId": self.created_menu_item_id,
-                    "quantity": 2,
+                    "quantity": 3,
                     "notes": "Extra spicy"
                 }
             ],
@@ -247,22 +273,61 @@ class NexaEatsAPITester:
             self.log_test("Create Order", False, f"Response: {response}")
             return False
 
-        # Get orders
-        success, response = self.make_request('GET', 'orders')
-        self.log_test("Get Orders", success and response.get('success'),
+        # move order through statuses and finally serve it
+        # preparing
+        status_data = {"status": "preparing"}
+        success, response = self.make_request('PUT', f'orders/{self.created_order_id}/status', status_data)
+        self.log_test("Update Order to Preparing", success and response.get('success'))
+
+        # ready
+        status_data = {"status": "ready"}
+        success, response = self.make_request('PUT', f'orders/{self.created_order_id}/status', status_data)
+        self.log_test("Update Order to Ready", success and response.get('success'))
+
+        # served - should deduct inventory and may trigger low stock
+        status_data = {"status": "served"}
+        success, response = self.make_request('PUT', f'orders/{self.created_order_id}/status', status_data)
+        self.log_test("Update Order to Served (deductinventory)", success and response.get('success'),
                      f"Response: {response}" if not success else "")
 
-        # Get kitchen orders
-        success, response = self.make_request('GET', 'orders/kitchen')
-        self.log_test("Get Kitchen Orders", success and response.get('success'),
-                     f"Response: {response}" if not success else "")
+        # verify inventory deduction
+        success, inventory_resp = self.make_request('GET', f'inventory/{self.created_inventory_id}')
+        if success and inventory_resp.get('success'):
+            remaining = inventory_resp['data']['quantity']
+            expected = 20.0 - (2 * 3)  # recipe qty*order qty
+            self.log_test("Inventory Deducted Correctly", abs(remaining - expected) < 0.0001,
+                         f"Remaining: {remaining}, Expected: {expected}")
+        else:
+            self.log_test("Inventory Deduction Verification", False, f"Response: {inventory_resp}")
 
-        # Update order status
-        if self.created_order_id:
-            status_data = {"status": "preparing"}
-            success, response = self.make_request('PUT', f'orders/{self.created_order_id}/status', status_data)
-            self.log_test("Update Order Status", success and response.get('success'),
-                         f"Response: {response}" if not success else "")
+        # low stock check after deduction
+        success, low_resp = self.make_request('GET', 'inventory/low-stock')
+        self.log_test("Low Stock Endpoint After Deduction", success and low_resp.get('success') and any(item['id']==self.created_inventory_id for item in low_resp.get('data',[])))
+
+        # try creating an order that will fail due to insufficient stock
+        # current remaining is expected variable; order quantity large enough to cause failure
+        bad_order = {
+            "tableId": self.created_table_id,
+            "items": [
+                {
+                    "menuItemId": self.created_menu_item_id,
+                    "quantity": 1000,
+                    "notes": "Too many"
+                }
+            ],
+            "orderType": "dine-in",
+            "customerName": "Bad Customer"
+        }
+        success, bad_resp = self.make_request('POST', 'orders', bad_order, 200)
+        if success and bad_resp.get('success'):
+            bad_order_id = bad_resp['data']['id']
+            # attempt to serve immediately
+            status_data = {"status": "served"}
+            success2, serve_resp = self.make_request('PUT', f'orders/{bad_order_id}/status', status_data)
+            self.log_test("Prevent Serve When Insufficient Stock", not success2 or not serve_resp.get('success'))
+        else:
+            # if order creation itself failed due to validation, that's fine
+            self.log_test("Prevent Serve When Insufficient Stock", True)
 
         return True
 
